@@ -71,20 +71,26 @@ const handleWrongGuess = (letter) => {
   
   const allLetterDivs = document.querySelectorAll(`.${letter}`);
 
-  if (allLetterDivs.length === 0 && numWrong < 5){
+  if (allLetterDivs.length === 0){
     numWrong += 1;
-    document.querySelector('img').setAttribute('src', `/static/images/guess${numWrong}.png`);
- 
-  } else if (numWrong === 5) { 
-      const letters = document.querySelectorAll('button')
-      for (letter of letters){
-        letter.disabled = true;
-      }
+    if (numWrong < 5){
+      document.querySelector('img').setAttribute('src', `/static/images/guess${numWrong}.png`);
+   
+    } else if (numWrong === 5) { 
+        document.querySelector('img').setAttribute('src', `/static/images/guess${numWrong}.png`);
 
-      document.querySelector('#play-again').style.display = 'block';
+        const letters = document.querySelectorAll('button')
+        for (letter of letters){
+          disableLetterButton(letter);
+          // letter.disabled = true;
+        }
   
+      document.querySelector('#play-again').style.display = 'block';
+
+      }  
   }
-}; 
+};
+
 
 
 // <div class="letter-box ${letter}"></div>
@@ -102,22 +108,18 @@ const handleWrongGuess = (letter) => {
   // finish this lab but we hard code it so we know what the word is
   // and can tell if things look correct for this word
   // const word = random.choice(WORDS)
-  const word = "hello";
-  // const wordCopy = word.slice();
+  // randomNumber = random(0, WORDS.length-1)
+  const word = WORDS[Math.floor(Math.random() * WORDS.length)];
   const wordList = Array.from(word);
   const wordSet = new Set(wordList);
   let correctGuesses = 0;
   
 
   // call the function that makes an empty line for each letter in the word
-  // Replace this line with the function call
   createDivsForChars(word);
 
   // call the function that makes a button for each letter in the alphabet
-  // Replace this line with the function call
   generateLetterButtons();
-
-  // in the next lab, you will be adding functionality to handle when
   
   // add an event handler to handle clicking on a letter
   for (const button of document.querySelectorAll('button')) {
@@ -125,7 +127,7 @@ const handleWrongGuess = (letter) => {
       const letter = button.innerHTML;
 
       // disables button so it can't be clicked again
-      disableLetterButton(letter);
+      disableLetterButton(button);
       
       // check if letter is in word
       if (isLetterInWord(letter)) {
@@ -138,6 +140,7 @@ const handleWrongGuess = (letter) => {
 
       } else {
         handleWrongGuess(letter);
+        
       }
          
     });
@@ -146,11 +149,16 @@ const handleWrongGuess = (letter) => {
   const resetGame = () => {
     window.location.replace("/sharkwords");
   }
-    
-  const reset = document.querySelector('a');
-  reset.addEventListener('click', resetGame);
 
-  const reset2 = document.querySelector('p');
-  reset2.addEventListener('click', resetGame);
+  const ayes = document.querySelectorAll('a');
+  for (a of ayes){
+    a.addEventListener('click', resetGame);
+  }
+    
+  // const reset = document.querySelector('a');
+  // reset.addEventListener('click', resetGame);
+
+  // const reset2 = document.querySelector('p');
+  // reset2.addEventListener('click', resetGame);
 
 })();
